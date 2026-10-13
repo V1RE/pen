@@ -62,7 +62,11 @@
       "undici@<8": "7.29.1",
       "dompurify": "3.4.16",
       "esbuild@>=0.27.3 <0.28.1": "0.28.2"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd"
+    ]
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",
