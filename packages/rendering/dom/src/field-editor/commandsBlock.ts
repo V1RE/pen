@@ -5,6 +5,7 @@ import {
 	setInlineMark as setInlineMarkCommand,
 } from "@input/pen-shortcuts";
 import { matchListInputRule } from "../utils/listInputRule";
+import { applyInputRule } from "./inputRuleApply";
 import {
 	type BlockInputRuleEngine,
 	type SelectionRange,
@@ -77,21 +78,7 @@ export function applyListInputRule(
 			offset: range.start,
 		});
 		if (ops) {
-			// Rule ops target the document after the pending input. Apply it
-			// separately because ops in one batch share pre-apply coordinates.
-			editor.apply(
-				[
-					{
-						type: "splice-text",
-						blockId,
-						from: range.start,
-						to: range.end,
-						insert: text,
-					},
-				],
-				{ origin: "input-rule" },
-			);
-			editor.apply(ops, { origin: "input-rule" });
+			applyInputRule(editor, { blockId, offset: range.start, text }, ops);
 			return {
 				blockId,
 				anchorOffset: 0,
@@ -109,23 +96,29 @@ export function applyListInputRule(
 		return null;
 	}
 
-	editor.apply(
-		[
-			{
-				type: "splice-text",
-				blockId,
-				from: match.deleteRange.start,
-				to: match.deleteRange.end,
-				insert: "",
-			},
-			{
-				type: "set-props",
-				blockId,
-				props: { type: match.blockType, ...match.newProps },
-			},
-		],
-		{ origin: "input-rule" },
-	);
+	// Core drops a conversion to a type the schema does not register but still
+	// applies the marker deletion, so the typed marker would vanish.
+	const registered = editor.schema
+		.allBlocks()
+		.some((schema) => schema.type === match.blockType);
+	if (!registered) {
+		return null;
+	}
+
+	applyInputRule(editor, { blockId, offset: range.start, text }, [
+		{
+			type: "splice-text",
+			blockId,
+			from: match.deleteRange.start,
+			to: match.deleteRange.end,
+			insert: "",
+		},
+		{
+			type: "set-props",
+			blockId,
+			props: { type: match.blockType, ...match.newProps },
+		},
+	]);
 
 	return {
 		blockId,
