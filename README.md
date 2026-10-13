@@ -351,10 +351,20 @@ Expanded field-editor mode and table-cell editing always use contenteditable, ev
 
 ## Development
 
+We recommend [mise](https://mise.jdx.dev/) instead of nvm to manage Node
+and pnpm together. [`mise.toml`](mise.toml) selects Node 24 and pnpm
+10.34.5. [Install and activate mise](https://mise.jdx.dev/getting-started.html),
+review `mise.toml`, then run from the repository root:
+
 ```bash
+mise trust
+mise install
 pnpm install
 pnpm dev
 ```
+
+See [local setup](CONTRIBUTING.md#local-setup) for usage without shell
+activation and the optional nvm setup.
 
 `pnpm dev` builds workspace `dist/` once, then watches the libraries and starts every Vite app on a fixed port. If a port is taken, Vite exits instead of hopping:
 

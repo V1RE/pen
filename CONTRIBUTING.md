@@ -6,10 +6,24 @@ Pen is an MIT-licensed SDK, copyright Input Systems B.V. Contributions to the re
 
 ## Local Setup
 
+We recommend [mise](https://mise.jdx.dev/) instead of nvm for local
+development. The root [`mise.toml`](mise.toml) selects Node 24 and pnpm
+10.34.5, matching `.nvmrc` and `packageManager` in `package.json`.
+
+[Install mise and activate it in your shell](https://mise.jdx.dev/getting-started.html),
+then review `mise.toml` and run these commands from the repository root:
+
 ```bash
+mise trust
+mise install
 pnpm install
 pnpm verify
 ```
+
+With shell activation, mise selects the repository's tools automatically.
+Without it, prefix commands with `mise exec --`, for example
+`mise exec -- pnpm install`. If you prefer nvm, `.nvmrc` remains available;
+install the pnpm version declared in `package.json` separately.
 
 `pnpm verify` runs the same checks your pull request will meet, in the
 same order, and ends with a summary naming the GitHub check behind each
