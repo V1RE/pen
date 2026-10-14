@@ -5,6 +5,10 @@ packages:
   - "examples/vanilla"
   - "playground"
 
+allowBuilds:
+  esbuild: true
+  workerd: true
+
 catalog:
   "@axe-core/playwright": "^4.13.0"
   "@changesets/cli": "^3.0.3"
