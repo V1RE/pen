@@ -9,6 +9,11 @@ allowBuilds:
   esbuild: true
   workerd: true
 
+overrides:
+  dompurify: 3.4.16
+  esbuild@>=0.27.3 <0.28.1: 0.28.2
+  undici@<8: 7.29.1
+
 catalog:
   "@axe-core/playwright": "^4.13.0"
   "@changesets/cli": "^3.0.3"
